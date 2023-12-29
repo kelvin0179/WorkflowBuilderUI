@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { AppBar, Button } from "@mui/material";
+import React from "react";
+import ButtonAppBar from "./components/AppBar";
+import MyForm from "./components/TestForm";
+import DynamicInputFields from "./components/DynamicInputField";
+import ChosenWorkflow from "./components/ChosenWorkflow";
+import OrderComponent from "./components/OrderComponents";
+import UpdateNode from "./reactFlow/Dashboard";
+import {BrowserRouter,Route, Routes} from "react-router-dom"
+import ExecutionPage from "./components/workflowExecution/ExecutionPage";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+ 
+export default function App() {
+	return (
+		<React.Fragment>
+			<ButtonAppBar/>
+			<BrowserRouter>
+				<Routes>
+					<Route path="/graph/:workflowId" Component={UpdateNode}/>
+					<Route path="/" Component={ExecutionPage}/>
+				</Routes>
+			</BrowserRouter>
+		</React.Fragment>
+	);
 }
-
-export default App;
