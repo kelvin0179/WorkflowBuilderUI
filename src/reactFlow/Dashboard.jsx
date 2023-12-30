@@ -191,9 +191,9 @@ const AddNodeOnEdgeDrop = () => {
     workflow.nodes=convertedNodes;
     workflow.edges=convertedEdges;
 
-    if(workflowId!==null){
-      workflow.id=workflowId;
-    }
+    // if(workflowId!==null){
+    //   workflow.id=workflowId;
+    // }
 
     console.log(workflow);
     axios.post('http://localhost:8080/workflow/', workflow)
