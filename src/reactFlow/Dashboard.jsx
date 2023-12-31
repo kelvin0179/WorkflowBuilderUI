@@ -16,7 +16,7 @@ import {useParams} from "react-router-dom"
 import 'reactflow/dist/style.css';
 import './index.css';
 import NodeWithDropdown from './Dropdown';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import axios from 'axios';
 
 const initialNodes = [
@@ -44,6 +44,8 @@ const AddNodeOnEdgeDrop = () => {
   const {workflowId} = useParams();
     const store = useStoreApi();
     const [options,setOptions] = useState([["Start"],["time","cost","capacity","Search For Carriers"],["Send Request by Priority Search","BroadCast Request to All"],["Accept","Reject"],["End"]]);
+    const [workflowName, setWorkflowName] = useState('');
+  const [openModal, setOpenModal] = useState(false);
   const reactFlowWrapper = useRef(null);
   const connectingNodeId = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -139,7 +141,59 @@ const AddNodeOnEdgeDrop = () => {
 
     fetchData();
   }, []);
+  const handleClickOpen = () => {
+    setOpenModal(true);
+  };
 
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+
+  const handleSave = () => {
+    // Do something with the workflowName, e.g., save it
+    console.log('Workflow Name:', workflowName);
+    let workflow = {};
+    workflow.nodes=[];
+    workflow.edges=[];
+    workflow.name=workflowName;
+
+    const convertedNodes = nodes.map((node, index) => ({
+      label: node.data.label,
+      compositeId: { id: node.id },
+      nodeValues: node.data.value,
+      selectedValue: node.data.selectedValue,
+      indexValue: node.data.indexValue,
+      disabled: node.data.disabled,
+      height: node.height,
+      width: node.width,
+      x: node.position.x,
+      y: node.position.y
+    }));
+    
+    const convertedEdges = edges.flat().map((edge, index) => ({
+      compositeId: { id: edge.id },
+      source: edge.source,
+      target: edge.target
+    }));
+
+    workflow.nodes=convertedNodes;
+    workflow.edges=convertedEdges;
+
+    if(workflowId!==null){
+      workflow.id=workflowId;
+    }
+
+    console.log(workflow);
+    axios.post('http://localhost:8080/workflow/', workflow)
+  .then(response => {
+    console.log('Success:', response.data);
+  })
+  .catch(error => {
+    console.error('Error:', error.message);
+  });
+    // Close the modal
+    handleClose();
+  };
   const onConnectStart = useCallback((_, { nodeId }) => {
     connectingNodeId.current = nodeId;
   }, []);
@@ -164,46 +218,46 @@ const AddNodeOnEdgeDrop = () => {
         restoreFlow();
         console.log(nodes,edges);
     },[nodes,setNodes,edges,setEdges]);
-  const onSaveClick = async() =>{
-    let workflow = {};
-    workflow.nodes=[];
-    workflow.edges=[];
+  // const onSaveClick = async() =>{
+  //   let workflow = {};
+  //   workflow.nodes=[];
+  //   workflow.edges=[];
 
-    const convertedNodes = nodes.map((node, index) => ({
-      label: node.data.label,
-      compositeId: { id: node.id },
-      nodeValues: node.data.value,
-      selectedValue: node.data.selectedValue,
-      indexValue: node.data.indexValue,
-      disabled: node.data.disabled,
-      height: node.height,
-      width: node.width,
-      x: node.position.x,
-      y: node.position.y
-    }));
+  //   const convertedNodes = nodes.map((node, index) => ({
+  //     label: node.data.label,
+  //     compositeId: { id: node.id },
+  //     nodeValues: node.data.value,
+  //     selectedValue: node.data.selectedValue,
+  //     indexValue: node.data.indexValue,
+  //     disabled: node.data.disabled,
+  //     height: node.height,
+  //     width: node.width,
+  //     x: node.position.x,
+  //     y: node.position.y
+  //   }));
     
-    const convertedEdges = edges.flat().map((edge, index) => ({
-      compositeId: { id: edge.id },
-      source: edge.source,
-      target: edge.target
-    }));
+  //   const convertedEdges = edges.flat().map((edge, index) => ({
+  //     compositeId: { id: edge.id },
+  //     source: edge.source,
+  //     target: edge.target
+  //   }));
 
-    workflow.nodes=convertedNodes;
-    workflow.edges=convertedEdges;
+  //   workflow.nodes=convertedNodes;
+  //   workflow.edges=convertedEdges;
 
-    // if(workflowId!==null){
-    //   workflow.id=workflowId;
-    // }
+  //   if(workflowId!==null){
+  //     workflow.id=workflowId;
+  //   }
 
-    console.log(workflow);
-    axios.post('http://localhost:8080/workflow/', workflow)
-  .then(response => {
-    console.log('Success:', response.data);
-  })
-  .catch(error => {
-    console.error('Error:', error.message);
-  });
-  }
+  //   console.log(workflow);
+  //   axios.post('http://localhost:8080/workflow/', workflow)
+  // .then(response => {
+  //   console.log('Success:', response.data);
+  // })
+  // .catch(error => {
+  //   console.error('Error:', error.message);
+  // });
+  // }
   const onConnectEnd = useCallback(
     (event) => {
       if (!connectingNodeId.current) return;
@@ -344,13 +398,38 @@ const AddNodeOnEdgeDrop = () => {
       >
         <Panel position="top-right">
             <Box className="button-container">
-                <Button variant='contained' color='primary' onClick={onSaveClick}>Save</Button>
+                {/* <Button variant='contained' color='primary' onClick={onSaveClick}>Save</Button> */}
                 <Button variant='contained' color='success' onClick={onRestore}>Undo</Button>
+                <Button variant="contained" color="primary" onClick={handleClickOpen}>
+                  Save
+                </Button>
             </Box>
         </Panel>
         <Controls/>
         <MiniMap style={{height:120}} zoomable pannable/>
       </ReactFlow>
+      <Dialog open={openModal} onClose={handleClose}>
+        <DialogTitle>Enter Workflow Name</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Workflow Name"
+            type="text"
+            fullWidth
+            value={workflowName}
+            onChange={(e) => setWorkflowName(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleSave} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

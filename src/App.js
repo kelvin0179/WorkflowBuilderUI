@@ -9,6 +9,7 @@ import UpdateNode from "./reactFlow/Dashboard";
 import {BrowserRouter,Route, Routes} from "react-router-dom"
 import ExecutionPage from "./components/workflowExecution/ExecutionPage";
 import WorkOrderDetailsPage from "./components/workflowExecution/WorkOrderDetailsPage";
+import CarrierPage from "./components/workflowExecution/CarrierPage";
 
 
  
@@ -21,6 +22,7 @@ export default function App() {
 					<Route path="/graph/:workflowId" Component={UpdateNode}/>
 					<Route path="/" Component={ExecutionPage}/>
 					<Route path="/:workOrderId" Component={WorkOrderDetailsPage}/>
+					<Route path="/carriers" Component={CarrierPage}/>
 				</Routes>
 			</BrowserRouter>
 		</React.Fragment>

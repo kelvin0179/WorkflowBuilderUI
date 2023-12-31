@@ -95,10 +95,7 @@ const ExecutionPage = () => {
   console.log('Dynamic Field JSON:', dynamicFieldJson);
     axios.post("http://localhost:8080/api/request",dynamicFieldJson)
     .then((response) => {
-      let data={};
-      data.workOrderData=response.data;
-      data.dynamicFieldJson=dynamicFieldJson;
-      navigate("",{data:data});
+      navigate(`/${response.data.id}`);
       })
     .catch((error) =>{
       console.log(error);
