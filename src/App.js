@@ -10,6 +10,7 @@ import {BrowserRouter,Route, Routes} from "react-router-dom"
 import ExecutionPage from "./components/workflowExecution/ExecutionPage";
 import WorkOrderDetailsPage from "./components/workflowExecution/WorkOrderDetailsPage";
 import CarrierPage from "./components/workflowExecution/CarrierPage";
+import WorkOrderDashboard from "./components/workflowExecution/WorkOrderDashboard";
 
 
  
@@ -23,6 +24,7 @@ export default function App() {
 					<Route path="/" Component={ExecutionPage}/>
 					<Route path="/:workOrderId" Component={WorkOrderDetailsPage}/>
 					<Route path="/carriers" Component={CarrierPage}/>
+					<Route path="/workOrderDash" Component={WorkOrderDashboard}/>
 				</Routes>
 			</BrowserRouter>
 		</React.Fragment>
