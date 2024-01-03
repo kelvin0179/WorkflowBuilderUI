@@ -9,6 +9,7 @@ import {
   Paper,
   Button,
   Typography,
+  Container,
 } from '@mui/material';
 import axios from 'axios';
 
@@ -55,8 +56,9 @@ const CarrierPage = () => {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <Typography variant="h5" gutterBottom style={{ padding: '10px' }}>
+        <Container maxWidth="xl" style={{padding:"20px"}}>
+
+<Typography variant="h5" gutterBottom style={{ padding: '10px' }}>
         Carriers Request Table
       </Typography>
       <TableContainer component={Paper} elevation={5} sx={{ borderRadius: '15px', overflow: 'hidden' }}>
@@ -67,7 +69,6 @@ const CarrierPage = () => {
               <TableCell style={{ color: 'white', background: 'black' }}>Origin</TableCell>
               <TableCell style={{ color: 'white', background: 'black' }}>Destination</TableCell>
               <TableCell style={{ color: 'white', background: 'black' }}>Workflow Name</TableCell>
-              <TableCell style={{ color: 'white', background: 'black' }}>Carrier Name</TableCell>
               <TableCell style={{ color: 'white', background: 'black' }}>Truck ID</TableCell>
               <TableCell style={{ color: 'white', background: 'black' }}>Actions</TableCell>
             </TableRow>
@@ -84,7 +85,6 @@ const CarrierPage = () => {
                   <TableCell>{record.origin}</TableCell>
                   <TableCell>{record.destination}</TableCell>
                   <TableCell>{record.workflowName}</TableCell>
-                  <TableCell>{record.carrierName}</TableCell>
                   <TableCell>{record.truckId}</TableCell>
                   <TableCell>
                     <Button
@@ -108,7 +108,8 @@ const CarrierPage = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+        </Container>
+      
   );
 };
 

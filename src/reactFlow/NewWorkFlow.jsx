@@ -12,7 +12,7 @@ import ReactFlow, {
   MiniMap,
   useStoreApi,
 } from 'reactflow';
-import {useParams} from "react-router-dom"
+import {useNavigate, useParams} from "react-router-dom"
 import 'reactflow/dist/style.css';
 import './index.css';
 import NodeWithDropdown from './Dropdown';
@@ -41,7 +41,7 @@ const nodeTypes={
 
 let id=1;
 const AddNodeOnEdgeDrop = () => {
-  const {workflowId} = useParams();
+    const navigate = useNavigate();
   const [isSaveButtonEnabled, setIsSaveButtonEnabled] = useState(false);
     const store = useStoreApi();
     const [options,setOptions] = useState([["Start"],["time","cost","capacity","Search For Carriers"],["Send Request by Priority Search","BroadCast Request to All"],["Accept","Reject"],["End"]]);
@@ -90,57 +90,57 @@ const AddNodeOnEdgeDrop = () => {
     [],
   );
   
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8080/workflow/${workflowId}`);
-        console.log(JSON.stringify(response.data));
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await axios.get(`http://localhost:8080/workflow/${workflowId}`);
+//         console.log(JSON.stringify(response.data));
         
-        id=(await axios.get(`http://localhost:8080/workflow/getMaxNodeId/${workflowId}`)).data;
-        console.log(id);
-        setEdges((eds)=>{
-          const convertedEdges=response.data.edges;
-          const reverseConvertedEdges = convertedEdges.map((convertedEdge) => ({
-            id: convertedEdge.compositeId.id,
-            source: convertedEdge.source,
-            target: convertedEdge.target,
-          }));
-          return reverseConvertedEdges;
-        });
-        setNodes((nds)=>{
-          const convertedNodes=response.data.nodes;
-          const reverseConvertedNodes = convertedNodes.map((convertedNode) => ({
-            id: convertedNode.compositeId.id,
-            data: {
-              label: convertedNode.label,
-              value: convertedNode.nodeValues,
-              selectedValue: convertedNode.selectedValue,
-              indexValue: convertedNode.indexValue,
-              disabled: convertedNode.disabled,
-            },
-            height: convertedNode.height,
-            width: convertedNode.width,
-            position: {
-              x: convertedNode.x,
-              y: convertedNode.y,
-            },
-            positionAbsolute:{
-              x: convertedNode.x,
-              y: convertedNode.y,
-            },
-            type:"customNode",
+//         id=(await axios.get(`http://localhost:8080/workflow/getMaxNodeId/${workflowId}`)).data;
+//         console.log(id);
+//         setEdges((eds)=>{
+//           const convertedEdges=response.data.edges;
+//           const reverseConvertedEdges = convertedEdges.map((convertedEdge) => ({
+//             id: convertedEdge.compositeId.id,
+//             source: convertedEdge.source,
+//             target: convertedEdge.target,
+//           }));
+//           return reverseConvertedEdges;
+//         });
+//         setNodes((nds)=>{
+//           const convertedNodes=response.data.nodes;
+//           const reverseConvertedNodes = convertedNodes.map((convertedNode) => ({
+//             id: convertedNode.compositeId.id,
+//             data: {
+//               label: convertedNode.label,
+//               value: convertedNode.nodeValues,
+//               selectedValue: convertedNode.selectedValue,
+//               indexValue: convertedNode.indexValue,
+//               disabled: convertedNode.disabled,
+//             },
+//             height: convertedNode.height,
+//             width: convertedNode.width,
+//             position: {
+//               x: convertedNode.x,
+//               y: convertedNode.y,
+//             },
+//             positionAbsolute:{
+//               x: convertedNode.x,
+//               y: convertedNode.y,
+//             },
+//             type:"customNode",
 
-          }));
+//           }));
           
-          return reverseConvertedNodes;
-        });
-      } catch (error) {
-        console.error('Error fetching data:', error.message);
-      }
-    };
+//           return reverseConvertedNodes;
+//         });
+//       } catch (error) {
+//         console.error('Error fetching data:', error.message);
+//       }
+//     };
 
-    fetchData();
-  }, []);
+//     fetchData();
+//   }, []);
   useEffect(() => {
     // Check if there are three nodes with specific selected values
     const hasAcceptNode = nodes.some((node) => node.data.selectedValue === "Accept");
@@ -201,9 +201,6 @@ const AddNodeOnEdgeDrop = () => {
     workflow.nodes=convertedNodes;
     workflow.edges=convertedEdges;
 
-    if(workflowId!==null){
-      workflow.id=workflowId;
-    }
 
     console.log(workflow);
     axios.post('http://localhost:8080/workflow/', workflow)
@@ -215,6 +212,7 @@ const AddNodeOnEdgeDrop = () => {
   });
     // Close the modal
     handleClose();
+    navigate("/");
   };
   const onConnectStart = useCallback((_, { nodeId }) => {
     connectingNodeId.current = nodeId;
@@ -422,7 +420,21 @@ const AddNodeOnEdgeDrop = () => {
         fitViewOptions={{ padding: 10 }}
         nodeOrigin={[0.5, 0]}
       >
-        {/*  */}
+        <Panel position="top-right">
+            <Box className="button-container">
+                {/* <Button variant='contained' color='primary' onClick={onSaveClick}>Save</Button> */}
+                <Button variant='contained' color='success' onClick={onRestore}>Undo</Button>
+                <Button variant="contained" color="primary" onClick={handleClickOpen} disabled={!isSaveButtonEnabled}
+                    sx={{ backgroundColor: 'black', color: 'white' ,
+                    '&:hover': {
+                        backgroundColor: 'green', // Change background color on hover
+                        color: 'black', // Change text color on hover
+                      },}}
+                >
+                  Save
+                </Button>
+            </Box>
+        </Panel>
         <Controls/>
         <MiniMap style={{height:120}} zoomable pannable/>
       </ReactFlow>
@@ -440,7 +452,7 @@ const AddNodeOnEdgeDrop = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="secondary">
+          <Button onClick={handleClose} color="secondary" >
             Cancel
           </Button>
           <Button onClick={handleSave} color="primary">

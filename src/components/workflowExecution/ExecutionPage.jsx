@@ -9,12 +9,18 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Container,
+  Autocomplete,
 } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const ExecutionPage = () => {
   const [isTextFieldDisabled, setIsTextFieldDisabled] = useState(false);
+  const [allRoutes,setAllRoutes] = useState([]);
+  const [uniqueDestinations, setUniqueDestinations] = useState([]);
+  const [selectedOrigin, setSelectedOrigin] = useState(null);
+  const [selectedDestination, setSelectedDestination] = useState(null);
   const [workflowData, setWorkflowData] = useState([]);
   const [selectedWorkOrder, setSelectedWorkOrder] = useState(null);
   const [selectedWorkOrderId, setSelectedWorkOrderId] = useState(null);
@@ -24,12 +30,22 @@ const ExecutionPage = () => {
       .get('http://localhost:8080/api/request/workOrderPageData')
       .then((response) => {
         setWorkflowData(response.data);
+        setAllRoutes(response.data[0].carriers);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
-
+  useEffect(() => {
+    if (selectedOrigin) {
+      const destinationsForSelectedOrigin = new Set(
+        allRoutes
+          .filter((carrier) => carrier.origin === selectedOrigin.value)
+          .map((carrier) => carrier.destination)
+      );
+      setUniqueDestinations([...destinationsForSelectedOrigin]);
+    }
+  }, [selectedOrigin, allRoutes]);
   const handleWorkOrderChange = (event) => {
     const selectedOrder = workflowData.find(
       (order) => order.name === event.target.value
@@ -37,7 +53,13 @@ const ExecutionPage = () => {
     setSelectedWorkOrder(selectedOrder);
     setSelectedWorkOrderId(selectedOrder ? selectedOrder.id : null);
   };
-
+  const handleOriginChange = (event, newValue) => {
+    setSelectedOrigin(newValue);
+    setSelectedDestination(null);
+  };
+  const handleDestinationChange = (event, newValue) => {
+    setSelectedDestination(newValue);
+  };
   const renderDynamicFields = () => {
     if (!selectedWorkOrder) return null;
 
@@ -61,8 +83,8 @@ const ExecutionPage = () => {
     event.preventDefault();
     // Add logic for handling form submission
     // Access the values from the input fields
-  const originValue = event.target.elements.origin.value;
-  const destinationValue = event.target.elements.destination.value;
+  const originValue = selectedOrigin.value;
+  const destinationValue = selectedDestination.value;
 
   // Access the selected value from the dropdown
   const selectedMode = selectedWorkOrder ? selectedWorkOrder.name : '';
@@ -103,6 +125,7 @@ const ExecutionPage = () => {
   };
 
   return (
+    <Container maxWidth="xl" style={{padding:"20px"}}>
     <Grid container style={{ minHeight: '100vh', padding: 20 }}>
       <Grid item xs={12} sm={8} md={6} lg={4}>
         <Paper elevation={3} style={{ padding: 20, borderRadius: 15 }}>
@@ -112,7 +135,7 @@ const ExecutionPage = () => {
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
+                {/* <TextField
                   label="Enter Origin"
                   fullWidth
                   variant="outlined"
@@ -121,19 +144,41 @@ const ExecutionPage = () => {
                   InputProps={{
                     style: { borderRadius: 10 },
                   }}
-                />
+                /> */}
+                <Autocomplete
+                disablePortal
+                id="origin-combo-box"
+                options={[...new Set(allRoutes.map((carrier) => carrier.origin))].map((origin) => ({
+                  label: origin,
+                  value: origin,
+                }))}
+                value={selectedOrigin}
+                onChange={handleOriginChange}
+                getOptionLabel={(option) => option.label}
+                isOptionEqualToValue={(option, value) => option.value === value.value}
+                
+                renderInput={(params) => (
+                  <TextField {...params} label="Origin" required={true} />
+                )}
+              />
+
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  label="Enter Destination"
-                  fullWidth
-                  variant="outlined"
-                  name="destination"
-                  disabled={isTextFieldDisabled}
-                  InputProps={{
-                    style: { borderRadius: 10 },
-                  }}
-                />
+              <Autocomplete
+                disablePortal
+                id="destination-combo-box"
+                options={uniqueDestinations.map((destination) => ({
+                  label: destination,
+                  value: destination,
+                }))}
+                getOptionLabel={(option) => option.label}
+                isOptionEqualToValue={(option, value) => option.value === value.value}
+                onChange={handleDestinationChange}
+                value={selectedDestination}
+                renderInput={(params) => (
+                  <TextField {...params} label="Destination" required={true} />
+                )}
+              />
               </Grid>
 
               <Grid item xs={12}>
@@ -144,6 +189,7 @@ const ExecutionPage = () => {
                     label="Select Work Order"
                     onChange={handleWorkOrderChange}
                     defaultValue=""
+                    required={true}
                     disabled={isTextFieldDisabled}
                   >
                     <MenuItem value="" disabled>
@@ -165,7 +211,12 @@ const ExecutionPage = () => {
                   variant="contained"
                   color="primary"
                   type="submit"
-                  style={{ borderRadius: 10, marginTop: 10 }}
+                  style={{ borderRadius: 7, marginTop: 10, }}
+                  sx={{ backgroundColor: 'black', color: 'white' ,
+                    '&:hover': {
+                        backgroundColor: 'green', // Change background color on hover
+                        color: 'black', // Change text color on hover
+                      },}}
                   disabled={isTextFieldDisabled}
                 >
                   Submit
@@ -176,6 +227,7 @@ const ExecutionPage = () => {
         </Paper>
       </Grid>
     </Grid>
+    </Container>
   );
 };
 

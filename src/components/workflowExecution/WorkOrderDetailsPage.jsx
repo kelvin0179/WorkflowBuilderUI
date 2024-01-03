@@ -17,6 +17,7 @@ import {
   TableRow,
   TableCell,
   Button,
+  Container,
 } from '@mui/material';
 import axios from 'axios';
 
@@ -36,6 +37,7 @@ const WorkOrderDetailsPage = () => {
   }, [workOrderId]);
 
   return (
+    <Container maxWidth="xl" style={{padding:"20px"}}>
     <Grid container style={{ minHeight: '100vh', padding: 20 }}>
       <Grid item xs={12} sm={8} md={6} lg={4}>
         <Paper elevation={3} style={{ padding: 20, borderRadius: 15 }}>
@@ -212,6 +214,7 @@ const WorkOrderDetailsPage = () => {
         </TableContainer>
       </Grid>
     </Grid>
+    </Container>
   );
 };
 

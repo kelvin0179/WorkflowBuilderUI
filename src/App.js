@@ -11,20 +11,25 @@ import ExecutionPage from "./components/workflowExecution/ExecutionPage";
 import WorkOrderDetailsPage from "./components/workflowExecution/WorkOrderDetailsPage";
 import CarrierPage from "./components/workflowExecution/CarrierPage";
 import WorkOrderDashboard from "./components/workflowExecution/WorkOrderDashboard";
+import ResponsiveAppBar from "./components/AppBar";
+import CreateGraph from "./reactFlow/NewWorkFlow";
+import WorkFlowDashboard from "./components/workflowExecution/WorkFlowDashboard";
 
 
  
 export default function App() {
 	return (
 		<React.Fragment>
-			<ButtonAppBar/>
 			<BrowserRouter>
+				<ResponsiveAppBar/>
 				<Routes>
 					<Route path="/graph/:workflowId" Component={UpdateNode}/>
+					<Route path="/graph" Component={CreateGraph}/>
 					<Route path="/" Component={ExecutionPage}/>
 					<Route path="/:workOrderId" Component={WorkOrderDetailsPage}/>
 					<Route path="/carriers" Component={CarrierPage}/>
 					<Route path="/workOrderDash" Component={WorkOrderDashboard}/>
+					<Route path="/workflowDash" Component={WorkFlowDashboard}/>
 				</Routes>
 			</BrowserRouter>
 		</React.Fragment>

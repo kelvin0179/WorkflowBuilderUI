@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Button, Paper } from '@mui/material';
+import { Typography, Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Button, Paper, Container } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -38,8 +38,8 @@ const WorkOrderDashboard = () => {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <Typography variant="h5" gutterBottom>
+    <Container maxWidth="xl" style={{padding:"20px"}}>
+      <Typography variant="h4" gutterBottom>
         Workorder Dashboard
       </Typography>
       <TableContainer component={Paper} elevation={5} sx={{ borderRadius: '15px', overflow: 'hidden' }}>
@@ -70,20 +70,25 @@ const WorkOrderDashboard = () => {
                   </Button>
                 </TableCell>
                 <TableCell>
-                  <Button
+                <Button
                     variant="contained"
                     color="primary"
                     onClick={() => handleViewClick(workOrder.id)}
-                  >
+                    sx={{ backgroundColor: 'black', color: 'white' ,
+                    '&:hover': {
+                        backgroundColor: 'green', // Change background color on hover
+                        color: 'black', // Change text color on hover
+                      },}}
+                    >
                     View
-                  </Button>
+                </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+      </Container>
   );
 };
 
