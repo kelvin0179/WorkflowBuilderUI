@@ -30,6 +30,7 @@ const WorkOrderDetailsPage = () => {
       .get(`http://localhost:8080/api/request/workOrderIdPageData/${workOrderId}`)
       .then((response) => {
         setWorkOrderDetails(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -137,7 +138,21 @@ const WorkOrderDetailsPage = () => {
                     />
                   </Grid>
                 )}
-
+                {workOrderDetails.loadType !== null && (
+                  <Grid item xs={12}>
+                    <TextField
+                      label="LoadType"
+                      fullWidth
+                      variant="outlined"
+                      name="loadType"
+                      disabled
+                      defaultValue={workOrderDetails.loadType}
+                      InputProps={{
+                        style: { borderRadius: 10 },
+                      }}
+                    />
+                  </Grid>
+                )}
                 <Grid item xs={12}>
                   {/* Display Alert based on status */}
                   <Alert
@@ -179,6 +194,7 @@ const WorkOrderDetailsPage = () => {
                 <TableCell style={{ color: 'white', background: 'black' }}>Cost</TableCell>
                 <TableCell style={{ color: 'white', background: 'black' }}>Time</TableCell>
                 <TableCell style={{ color: 'white', background: 'black' }}>Capacity</TableCell>
+                <TableCell style={{ color: 'white', background: 'black' }}>LoadType</TableCell>
                 <TableCell style={{ color: 'white', background: 'black' }}>Status</TableCell>
               </TableRow>
             </TableHead>
@@ -192,6 +208,7 @@ const WorkOrderDetailsPage = () => {
                     <TableCell>{carrier.cost}</TableCell>
                     <TableCell>{carrier.time}</TableCell>
                     <TableCell>{carrier.capacity}</TableCell>
+                    <TableCell>{carrier.loadType}</TableCell>
                     <TableCell>
                       {carrier.status === 'Rejected' ? (
                         <Button variant="outlined" color="error">

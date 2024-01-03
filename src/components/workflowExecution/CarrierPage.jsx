@@ -12,6 +12,7 @@ import {
   Container,
 } from '@mui/material';
 import axios from 'axios';
+import { redirect } from 'react-router-dom';
 
 const CarrierPage = () => {
   const [carrierData, setCarrierData] = useState([]);
@@ -49,6 +50,7 @@ const CarrierPage = () => {
     .then((response) => {
       // Handle success, if needed
       console.log('Status updated successfully:', response.data);
+      redirect("/carriers");
     })
     .catch((error) => {
       console.error('Error updating status:', error);

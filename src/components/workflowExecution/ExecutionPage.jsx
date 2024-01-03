@@ -62,24 +62,40 @@ const ExecutionPage = () => {
   };
   const renderDynamicFields = () => {
     if (!selectedWorkOrder) return null;
-
+  
     return selectedWorkOrder.nodeValues.map((nodeValue, index) => (
       <Grid item xs={12} key={index}>
-        <TextField
-          label={nodeValue}
-          fullWidth
-          variant="outlined"
-          name={`nodeValue_${index}`}
-          disabled={isTextFieldDisabled}
-          InputProps={{
-            style: { borderRadius: 10 },
-          }}
-        />
+        {nodeValue === 'loadType' ? (
+          <FormControl fullWidth variant="outlined" required={true}>
+            <InputLabel>{nodeValue}</InputLabel>
+            <Select
+              label={nodeValue}
+              name={`nodeValue_${index}`}
+              disabled={isTextFieldDisabled}
+            >
+              <MenuItem value="Hazmat">Hazmat</MenuItem>
+              <MenuItem value="Perishable">Perishable</MenuItem>
+            </Select>
+          </FormControl>
+        ) : (
+          <TextField
+            label={nodeValue}
+            fullWidth
+            required={true}
+            variant="outlined"
+            name={`nodeValue_${index}`}
+            disabled={isTextFieldDisabled}
+            InputProps={{
+              style: { borderRadius: 10 },
+            }}
+          />
+        )}
       </Grid>
     ));
   };
+  
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
     // Add logic for handling form submission
     // Access the values from the input fields
@@ -115,7 +131,7 @@ const ExecutionPage = () => {
   dynamicFieldJson.workflowId=selectedModeId;
 
   console.log('Dynamic Field JSON:', dynamicFieldJson);
-    axios.post("http://localhost:8080/api/request",dynamicFieldJson)
+    await axios.post("http://localhost:8080/api/request",dynamicFieldJson)
     .then((response) => {
       navigate(`/${response.data.id}`);
       })

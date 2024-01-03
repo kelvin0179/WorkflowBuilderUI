@@ -44,7 +44,7 @@ const AddNodeOnEdgeDrop = () => {
     const navigate = useNavigate();
   const [isSaveButtonEnabled, setIsSaveButtonEnabled] = useState(false);
     const store = useStoreApi();
-    const [options,setOptions] = useState([["Start"],["time","cost","capacity","Search For Carriers"],["Send Request by Priority Search","BroadCast Request to All"],["Accept","Reject"],["End"]]);
+    const [options,setOptions] = useState([["Start"],["time","cost","capacity","loadType","Search For Carriers"],["Send Request by Priority Search","BroadCast Request to All"],["Accept","Reject"],["End"]]);
     const [workflowName, setWorkflowName] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const reactFlowWrapper = useRef(null);
