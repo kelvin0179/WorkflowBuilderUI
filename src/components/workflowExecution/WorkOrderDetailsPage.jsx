@@ -36,7 +36,17 @@ const WorkOrderDetailsPage = () => {
         console.error(error);
       });
   }, [workOrderId]);
-
+  const handleReassignClick = async (workOrderId) => {
+    try {
+        // Perform the axios.get request
+        await axios.get(`http://localhost:8080/api/request/reassignCarriersToWorkOrder/${workOrderId}`);
+        
+        // Reload the window
+        window.location.reload();
+    } catch (error) {
+        console.error('Error during reassign:', error);
+    }
+};
   return (
     <Container maxWidth="xl" style={{padding:"20px"}}>
     <Grid container style={{ minHeight: '100vh', padding: 20 }}>
@@ -167,6 +177,24 @@ const WorkOrderDetailsPage = () => {
                     {workOrderDetails.status}
                   </Alert>
                 </Grid>
+                {workOrderDetails && workOrderDetails.status && workOrderDetails.status === 'Rejected' && (
+                    <Grid item xs={12} >
+                        <Button
+                            color='success'
+                            sx={{
+                                backgroundColor: "black",
+                                color: "white",
+                                '&:hover': {
+                                    backgroundColor: 'green',
+                                    color: 'black',
+                                },
+                            }}
+                            onClick={() => handleReassignClick(workOrderId)}
+                        >
+                            Reassign
+                        </Button>
+                    </Grid>
+                )}
               </Grid>
             </form>
           ) : (
