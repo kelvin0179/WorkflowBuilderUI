@@ -14,6 +14,7 @@ import WorkOrderDashboard from "./components/workflowExecution/WorkOrderDashboar
 import ResponsiveAppBar from "./components/AppBar";
 import CreateGraph from "./reactFlow/NewWorkFlow";
 import WorkFlowDashboard from "./components/workflowExecution/WorkFlowDashboard";
+import { ToastContainer } from "react-toastify";
 
 
  
@@ -22,6 +23,10 @@ export default function App() {
 		<React.Fragment>
 			<BrowserRouter>
 				<ResponsiveAppBar/>
+				<ToastContainer
+
+					progressStyle={{ backgroundColor: "black" }}
+					/>
 				<Routes>
 					<Route path="/graph/:workflowId" Component={UpdateNode}/>
 					<Route path="/graph" Component={CreateGraph}/>

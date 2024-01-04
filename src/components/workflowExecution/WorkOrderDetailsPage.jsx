@@ -178,58 +178,71 @@ const WorkOrderDetailsPage = () => {
       </Grid>
       {/* Table for Carriers */}
       <Grid item xs={12} sm={8} md={6} lg={8}>
-      <Typography variant="h5" align="center" gutterBottom>
-                Carriers Associated
-              </Typography>
-        <TableContainer
-          component={Paper}
-          elevation={5}
-          sx={{ borderRadius: '15px', overflow: 'hidden', marginLeft: '20px' }}
-        >
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell style={{ color: 'white', background: 'black' }}>Carrier ID</TableCell>
-                <TableCell style={{ color: 'white', background: 'black' }}>Truck ID</TableCell>
-                <TableCell style={{ color: 'white', background: 'black' }}>Cost</TableCell>
-                <TableCell style={{ color: 'white', background: 'black' }}>Time</TableCell>
-                <TableCell style={{ color: 'white', background: 'black' }}>Capacity</TableCell>
-                <TableCell style={{ color: 'white', background: 'black' }}>LoadType</TableCell>
-                <TableCell style={{ color: 'white', background: 'black' }}>Status</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {workOrderDetails &&
-                workOrderDetails.carriers &&
-                workOrderDetails.carriers.map((carrier) => (
-                  <TableRow key={carrier.carrierId}>
-                    <TableCell>{carrier.carrierId}</TableCell>
-                    <TableCell>{carrier.truckId}</TableCell>
-                    <TableCell>{carrier.cost}</TableCell>
-                    <TableCell>{carrier.time}</TableCell>
-                    <TableCell>{carrier.capacity}</TableCell>
-                    <TableCell>{carrier.loadType}</TableCell>
-                    <TableCell>
-                      {carrier.status === 'Rejected' ? (
-                        <Button variant="outlined" color="error">
-                          {carrier.status}
-                        </Button>
-                      ) : carrier.status === 'Accepted' ? (
-                        <Button variant="outlined" color="success">
-                          {carrier.status}
-                        </Button>
-                      ) : (
-                        <Button variant="outlined" color="primary">
-                          {carrier.status}
-                        </Button>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Grid>
+  <Typography variant="h5" align="center" gutterBottom>
+    Carriers Associated
+  </Typography>
+  {workOrderDetails && workOrderDetails.carriers ? (
+    <TableContainer
+      component={Paper}
+      elevation={5}
+      sx={{ borderRadius: '15px', overflow: 'hidden', marginLeft: '20px' }}
+    >
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell style={{ color: 'white', background: 'black' }}>Carrier ID</TableCell>
+            <TableCell style={{ color: 'white', background: 'black' }}>Truck ID</TableCell>
+            {workOrderDetails.cost !== null && (
+              <TableCell style={{ color: 'white', background: 'black' }}>Cost</TableCell>
+            )}
+            {workOrderDetails.time !== null && (
+              <TableCell style={{ color: 'white', background: 'black' }}>Time</TableCell>
+            )}
+            {workOrderDetails.capacity !== null && (
+              <TableCell style={{ color: 'white', background: 'black' }}>Capacity</TableCell>
+            )}
+            {workOrderDetails.loadType !== null && (
+              <TableCell style={{ color: 'white', background: 'black' }}>LoadType</TableCell>
+            )}
+            <TableCell style={{ color: 'white', background: 'black' }}>Status</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {workOrderDetails.carriers.map((carrier) => (
+            <TableRow key={carrier.carrierId}>
+              <TableCell>{carrier.carrierId}</TableCell>
+              <TableCell>{carrier.truckId}</TableCell>
+              {workOrderDetails.cost !== null && <TableCell>{carrier.cost}</TableCell>}
+              {workOrderDetails.time !== null && <TableCell>{carrier.time}</TableCell>}
+              {workOrderDetails.capacity !== null && <TableCell>{carrier.capacity}</TableCell>}
+              {workOrderDetails.loadType !== null && <TableCell>{carrier.loadType}</TableCell>}
+              <TableCell>
+                {carrier.status === 'Rejected' ? (
+                  <Button variant="outlined" color="error">
+                    {carrier.status}
+                  </Button>
+                ) : carrier.status === 'Accepted' ? (
+                  <Button variant="outlined" color="success">
+                    {carrier.status}
+                  </Button>
+                ) : (
+                  <Button variant="outlined" color="primary">
+                    {carrier.status}
+                  </Button>
+                )}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  ) : (
+    <Typography variant="body1" align="center">
+      Loading Carriers...
+    </Typography>
+  )}
+</Grid>
+
     </Grid>
     </Container>
   );

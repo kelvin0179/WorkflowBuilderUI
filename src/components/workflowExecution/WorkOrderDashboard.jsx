@@ -38,20 +38,25 @@ const WorkOrderDashboard = () => {
   };
 
   return (
-    <Container maxWidth="xl" style={{padding:"20px"}}>
+    <Container maxWidth="xl" style={{ padding: "20px" }}>
       <Typography variant="h4" gutterBottom>
         Workorder Dashboard
       </Typography>
-      <TableContainer component={Paper} elevation={5} sx={{ borderRadius: '15px', overflow: 'hidden' }}>
+      {workOrders.length === 0 && (
+        <Typography variant="h5" gutterBottom style={{ padding: '10px' }}>
+        No WorkOrder Records
+      </Typography>
+      )}
+      <TableContainer component={Paper} elevation={5} sx={{ borderRadius: '15px', overflow: 'hidden', opacity: workOrders.length ? 1 : 0, transition: 'opacity 0.5s ease-in-out' }}>
         <Table>
           <TableHead >
             <TableRow>
-              <TableCell style={{ backgroundColor: 'black' , color:"white"}}>Sequence No.</TableCell>
-              <TableCell style={{ backgroundColor: 'black' , color:"white"}}>WorkorderId</TableCell>
-              <TableCell style={{ backgroundColor: 'black' , color:"white"}}>Origin</TableCell>
-              <TableCell style={{ backgroundColor: 'black' , color:"white"}}>Destination</TableCell>
-              <TableCell style={{ backgroundColor: 'black' , color:"white"}}>Status</TableCell>
-              <TableCell style={{ backgroundColor: 'black' , color:"white"}}>Action</TableCell>
+              <TableCell style={{ backgroundColor: 'black', color: "white" }}>Sequence No.</TableCell>
+              <TableCell style={{ backgroundColor: 'black', color: "white" }}>WorkorderId</TableCell>
+              <TableCell style={{ backgroundColor: 'black', color: "white" }}>Origin</TableCell>
+              <TableCell style={{ backgroundColor: 'black', color: "white" }}>Destination</TableCell>
+              <TableCell style={{ backgroundColor: 'black', color: "white" }}>Status</TableCell>
+              <TableCell style={{ backgroundColor: 'black', color: "white" }}>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -70,25 +75,27 @@ const WorkOrderDashboard = () => {
                   </Button>
                 </TableCell>
                 <TableCell>
-                <Button
+                  <Button
                     variant="contained"
                     color="primary"
                     onClick={() => handleViewClick(workOrder.id)}
-                    sx={{ backgroundColor: 'black', color: 'white' ,
-                    '&:hover': {
+                    sx={{
+                      backgroundColor: 'black', color: 'white',
+                      '&:hover': {
                         backgroundColor: 'green', // Change background color on hover
                         color: 'black', // Change text color on hover
-                      },}}
-                    >
+                      },
+                    }}
+                  >
                     View
-                </Button>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      </Container>
+    </Container>
   );
 };
 

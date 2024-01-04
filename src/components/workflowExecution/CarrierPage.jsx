@@ -50,7 +50,7 @@ const CarrierPage = () => {
     .then((response) => {
       // Handle success, if needed
       console.log('Status updated successfully:', response.data);
-      redirect("/carriers");
+      window.location.reload();
     })
     .catch((error) => {
       console.error('Error updating status:', error);
@@ -60,10 +60,15 @@ const CarrierPage = () => {
   return (
         <Container maxWidth="xl" style={{padding:"20px"}}>
 
-<Typography variant="h5" gutterBottom style={{ padding: '10px' }}>
+        <Typography variant="h5" gutterBottom style={{ padding: '10px' }}>
         Carriers Request Table
       </Typography>
-      <TableContainer component={Paper} elevation={5} sx={{ borderRadius: '15px', overflow: 'hidden' }}>
+      {carrierData.length === 0 && (
+        <Typography variant="h5" gutterBottom style={{ padding: '10px' }}>
+        No Carrier Records
+      </Typography>
+      )}
+      <TableContainer component={Paper} elevation={5} sx={{ borderRadius: '15px', overflow: 'hidden',opacity: carrierData.length ? 1 : 0,transition: 'opacity 0.5s ease-in-out' }}>
         <Table>
           <TableHead>
             <TableRow>

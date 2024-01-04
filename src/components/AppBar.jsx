@@ -12,13 +12,14 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
   const navigate=useNavigate();
+  const location=useLocation();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -134,16 +135,18 @@ function ResponsiveAppBar() {
           >
             AUTO BUILD
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }}}>
           <Button
           component={Link}
           to="/graph"
                 onClick={handleCloseNavMenu}
                 sx={{
                   my: 2,
-                  color: 'white',
+                  mx :1 ,
+                  
                   display: 'block',
-                  backgroundColor: 'transparent', // Set initial background color
+                  color: location.pathname === '/graph' ? 'black' : 'white',
+                  backgroundColor: location.pathname === '/graph' ? 'green' : 'transparent',
                   '&:hover': {
                     backgroundColor: 'green', // Change background color on hover
                     color: 'black', // Change text color on hover
@@ -158,9 +161,10 @@ function ResponsiveAppBar() {
                 onClick={handleCloseNavMenu}
                 sx={{
                   my: 2,
-                  color: 'white',
+                  mx :1 ,
                   display: 'block',
-                  backgroundColor: 'transparent', // Set initial background color
+                  color: location.pathname === '/' ? 'black' : 'white',
+                  backgroundColor: location.pathname === '/' ? 'green' : 'transparent',
                   '&:hover': {
                     backgroundColor: 'green', // Change background color on hover
                     color: 'black', // Change text color on hover
@@ -175,9 +179,10 @@ function ResponsiveAppBar() {
             onClick={handleCloseNavMenu}
             sx={{
               my: 2,
-              color: 'white',
+              mx :1 ,
               display: 'block',
-              backgroundColor: 'transparent', // Set initial background color
+              color: location.pathname === '/workOrderDash' ? 'black' : 'white',
+                  backgroundColor: location.pathname === '/workOrderDash' ? 'green' : 'transparent',
               '&:hover': {
                 backgroundColor: 'green', // Change background color on hover
                 color: 'black', // Change text color on hover
@@ -192,9 +197,10 @@ function ResponsiveAppBar() {
             onClick={handleCloseNavMenu}
             sx={{
               my: 2,
-              color: 'white',
+              mx :1 ,
               display: 'block',
-              backgroundColor: 'transparent', // Set initial background color
+              color: location.pathname === '/workflowDash' ? 'black' : 'white',
+                  backgroundColor: location.pathname === '/workflowDash' ? 'green' : 'transparent',
               '&:hover': {
                 backgroundColor: 'green', // Change background color on hover
                 color: 'black', // Change text color on hover
@@ -211,9 +217,9 @@ function ResponsiveAppBar() {
                 onClick={handleCloseNavMenu}
                 sx={{
                   my: 2,
-                  color: 'white',
                   display: 'block',
-                  backgroundColor: 'transparent', // Set initial background color
+                  color: location.pathname === '/carriers' ? 'black' : 'white',
+                  backgroundColor: location.pathname === '/carriers' ? 'green' : 'transparent',
                   '&:hover': {
                     backgroundColor: 'green', // Change background color on hover
                     color: 'black', // Change text color on hover

@@ -27,7 +27,12 @@ const WorkFlowDashboard = () => {
       <Typography variant="h4" gutterBottom>
         Workflow Dashboard
       </Typography>
-      <TableContainer component={Paper} elevation={5} sx={{ borderRadius: '15px', overflow: 'hidden' }}>
+      {workflows.length === 0 && (
+        <Typography variant="h5" gutterBottom style={{ padding: '10px' }}>
+        No Workflow Records
+      </Typography>
+      )}
+      <TableContainer component={Paper} elevation={5} sx={{ borderRadius: '15px', overflow: 'hidden' ,opacity: workflows.length ? 1 : 0,transition: 'opacity 0.5s ease-in-out'}}>
         <Table>
           <TableHead >
             <TableRow>

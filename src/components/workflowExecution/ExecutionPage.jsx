@@ -14,6 +14,8 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ExecutionPage = () => {
   const [isTextFieldDisabled, setIsTextFieldDisabled] = useState(false);
@@ -129,15 +131,17 @@ const ExecutionPage = () => {
   dynamicFieldJson.origin=originValue;
   dynamicFieldJson.destination=destinationValue;
   dynamicFieldJson.workflowId=selectedModeId;
-
+  let responseId;
   console.log('Dynamic Field JSON:', dynamicFieldJson);
     await axios.post("http://localhost:8080/api/request",dynamicFieldJson)
     .then((response) => {
-      navigate(`/${response.data.id}`);
+      responseId=response.data.id;
+      toast.success("Work Order Created");
       })
     .catch((error) =>{
       console.log(error);
     });
+    navigate(`/${responseId}`);
   };
 
   return (
@@ -198,7 +202,8 @@ const ExecutionPage = () => {
               </Grid>
 
               <Grid item xs={12}>
-                <FormControl fullWidth variant="outlined">
+                {workflowData && (
+                  <FormControl fullWidth variant="outlined">
                   <InputLabel id="workOrder-label">Select Work Flow</InputLabel>
                   <Select
                     labelId="workOrder-label"
@@ -218,6 +223,7 @@ const ExecutionPage = () => {
                     ))}
                   </Select>
                 </FormControl>
+                )}
               </Grid>
 
               {renderDynamicFields()}

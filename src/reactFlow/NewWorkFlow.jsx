@@ -18,6 +18,7 @@ import './index.css';
 import NodeWithDropdown from './Dropdown';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const initialNodes = [
   {
@@ -75,7 +76,7 @@ const AddNodeOnEdgeDrop = () => {
         const sourceNodeIndex=sourceNode.data.indexValue;
         const targetNodeIndex=targetNode.data.indexValue;
 
-        if(sourceNode.data.selectedValue==="Reject" && targetNodeIndex===2 && sourceNodeIndex===3) {
+        if(sourceNode.data.selectedValue==="Reject" && targetNodeIndex===2 && sourceNodeIndex===3 && targetNode.data.selectedValue==="Send Request by Priority Search") {
             console.log("here");
             return addEdge(params, eds)
         }
@@ -212,6 +213,7 @@ const AddNodeOnEdgeDrop = () => {
   });
     // Close the modal
     handleClose();
+    toast.success("Flow Created Successfully");
     navigate("/");
   };
   const onConnectStart = useCallback((_, { nodeId }) => {

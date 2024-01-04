@@ -32,8 +32,17 @@ const NodeWithDropdown = ({ id, data, position }) => {
       return(<Handle type="target" position={Position.Top} id={id} />);
     }
   }
+  const calculateDropdownWidth = () => {
+    // Adjust the factor based on your preference
+    const dropdownWidth = data.selectedValue.length * 8;
+    const extraWidth = 20; // Adjust this value based on your preference
+    return dropdownWidth + extraWidth > 100 ? dropdownWidth + extraWidth : 100; // Minimum width of 100px
+  };
   return (
-    <Box sx={{}} className="text-updater-node">
+    <Box sx={{width: calculateDropdownWidth(),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',}} className="text-updater-node">
       <FormControl sx={{alignContent:"center",justifyContent:"center"}}>
         <InputLabel id="demo-simple-select-label">Process</InputLabel>
         <Select
