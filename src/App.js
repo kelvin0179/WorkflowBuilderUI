@@ -12,10 +12,11 @@ import WorkOrderDetailsPage from "./components/workflowExecution/WorkOrderDetail
 import CarrierPage from "./components/workflowExecution/CarrierPage";
 import WorkOrderDashboard from "./components/workflowExecution/WorkOrderDashboard";
 import ResponsiveAppBar from "./components/AppBar";
+import FlowWatcher from "./reactFlow/FlowWatcher";
 import CreateGraph from "./reactFlow/NewWorkFlow";
 import WorkFlowDashboard from "./components/workflowExecution/WorkFlowDashboard";
 import { ToastContainer } from "react-toastify";
-
+import CreateNewGraph from "./reactFlow/FlowBuilder";
 
  
 export default function App() {
@@ -28,8 +29,9 @@ export default function App() {
 					progressStyle={{ backgroundColor: "black" }}
 					/>
 				<Routes>
-					<Route path="/graph/:workflowId" Component={UpdateNode}/>
-					<Route path="/graph" Component={CreateGraph}/>
+					<Route path="/graph/:workflowId" Component={FlowWatcher}/>
+					{/* <Route path="/graph" Component={CreateGraph}/> */}
+					<Route path="/graph" Component={CreateNewGraph}/>
 					<Route path="/" Component={ExecutionPage}/>
 					<Route path="/:workOrderId" Component={WorkOrderDetailsPage}/>
 					<Route path="/carriers" Component={CarrierPage}/>

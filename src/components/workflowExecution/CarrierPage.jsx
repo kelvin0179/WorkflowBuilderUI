@@ -19,7 +19,7 @@ const CarrierPage = () => {
 
   useEffect(() => {
     // Fetch carrier data from the backend
-    axios.get('http://localhost:8080/api/carriers/carrierPage')
+    axios.get('http://localhost:8081/api/workorders/assignCarriers')
       .then((response) => {
         // Add 'status' field with value 'Assigned' to each record
         const dataWithStatus = response.data.map((record) => ({
@@ -41,7 +41,7 @@ const CarrierPage = () => {
     setCarrierData(updatedData);
 
     // Perform the API call to update the status
-    axios.post('http://localhost:8080/api/request/carrier', {
+    axios.post('http://localhost:8081/api/request/carrier', {
       carriersId: record.carrierId,
       workOrderId: record.workOrderId,
       workflowId: record.workflowId,
@@ -60,7 +60,7 @@ const CarrierPage = () => {
   return (
         <Container maxWidth="xl" style={{padding:"20px"}}>
 
-        <Typography variant="h5" gutterBottom style={{ padding: '10px' }}>
+        <Typography variant="h4" gutterBottom style={{ padding: '10px' }}>
         Carriers Request Table
       </Typography>
       {carrierData.length === 0 && (
@@ -73,11 +73,8 @@ const CarrierPage = () => {
           <TableHead>
             <TableRow>
               <TableCell style={{ color: 'white', background: 'black' }}>Sequence No</TableCell>
-              <TableCell style={{ color: 'white', background: 'black' }}>Origin</TableCell>
-              <TableCell style={{ color: 'white', background: 'black' }}>Destination</TableCell>
-              <TableCell style={{ color: 'white', background: 'black' }}>Workflow Name</TableCell>
-              <TableCell style={{ color: 'white', background: 'black' }}>Truck ID</TableCell>
-              <TableCell style={{ color: 'white', background: 'black' }}>Actions</TableCell>
+              <TableCell style={{ color: 'white', background: 'black' }}>CarrierId</TableCell>
+              <TableCell style={{ color: 'white', background: 'black' }}>WorkOrderId</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -89,9 +86,9 @@ const CarrierPage = () => {
                   sx={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f2f2' }}
                 >
                   <TableCell>{index + 1}</TableCell>
-                  <TableCell>{record.origin}</TableCell>
-                  <TableCell>{record.destination}</TableCell>
-                  <TableCell>{record.workflowName}</TableCell>
+                  <TableCell>{record.carrierId}</TableCell>
+                  <TableCell>{record.workOrderId}</TableCell>
+                  {/* <TableCell>{record.workflowName}</TableCell>
                   <TableCell>{record.truckId}</TableCell>
                   <TableCell>
                     <Button
@@ -109,7 +106,7 @@ const CarrierPage = () => {
                     >
                       Reject
                     </Button>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))}
           </TableBody>

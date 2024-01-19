@@ -23,12 +23,12 @@ const NodeWithDropdown = ({ id, data, position }) => {
     );
   };
   const lowerHandle=()=>{
-    if(data.indexValue!==4){
+    if(true){
       return(<Handle type="source" position={Position.Bottom} id={id} />);
     }
   }
   const upperHandle=()=>{
-    if(data.indexValue!==0){
+    if(true){
       return(<Handle type="target" position={Position.Top} id={id} />);
     }
   }

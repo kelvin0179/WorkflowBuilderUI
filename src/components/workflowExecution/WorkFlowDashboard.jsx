@@ -10,7 +10,7 @@ const WorkFlowDashboard = () => {
   useEffect(() => {
     const fetchWorkflows = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/workflow');
+        const response = await axios.get('http://localhost:8080/workflowData');
         setWorkflows(response.data);
       } catch (error) {
         console.error('Error fetching work orders:', error);

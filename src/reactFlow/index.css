@@ -29,8 +29,8 @@
 }
 
 .react-flow .react-flow__node {
-  height: 40px;
-  width: 150px;
+  height: auto;
+  width: auto;
   justify-content: center;
   align-items: center;
   display: flex;

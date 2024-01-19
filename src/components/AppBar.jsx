@@ -173,7 +173,7 @@ function ResponsiveAppBar() {
               >
                 Create Order
           </Button>
-          <Button
+          {/* <Button
             component={Link}
             to="/workOrderDash"
             onClick={handleCloseNavMenu}
@@ -190,7 +190,7 @@ function ResponsiveAppBar() {
             }}
           >
             Order Dashboard
-          </Button>
+          </Button> */}
           <Button
             component={Link}
             to="/workflowDash"

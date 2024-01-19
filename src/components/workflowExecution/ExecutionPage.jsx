@@ -29,14 +29,20 @@ const ExecutionPage = () => {
   const navigate = useNavigate();
   useEffect(() => {
     axios
-      .get('http://localhost:8080/api/request/workOrderPageData')
+      .get('http://localhost:8081/api/carriers')
       .then((response) => {
-        setWorkflowData(response.data);
-        setAllRoutes(response.data[0].carriers);
+        setAllRoutes(response.data);
       })
       .catch((error) => {
         console.error(error);
       });
+    axios.get('http://localhost:8080/workflowData')
+    .then(response => {
+      setWorkflowData(response.data);
+    })
+    .catch((error) => {
+      console.error(error);
+    })
   }, []);
   useEffect(() => {
     if (selectedOrigin) {
@@ -109,39 +115,53 @@ const ExecutionPage = () => {
   const selectedModeId = selectedWorkOrderId;
   // Access additional values from the dynamic input fields
   console.log(selectedWorkOrder);
-  const dynamicFieldValues = selectedWorkOrder
-    ? selectedWorkOrder.nodeValues.map((nodeValue, index) => ({
-        nodeValue,
-        dynamicValue: event.target.elements[`nodeValue_${index}`].value,
-      }))
-    : [];
+  // const dynamicFieldValues = selectedWorkOrder
+  //   ? selectedWorkOrder.nodeValues.map((nodeValue, index) => ({
+  //       nodeValue,
+  //       dynamicValue: event.target.elements[`nodeValue_${index}`].value,
+  //     }))
+  //   : [];
 
-    const dynamicFieldJson = dynamicFieldValues.reduce((acc, { nodeValue, dynamicValue }) => {
-      acc[nodeValue] = dynamicValue;
-      return acc;
-    }, {});
+  //   const dynamicFieldJson = dynamicFieldValues.reduce((acc, { nodeValue, dynamicValue }) => {
+  //     acc[nodeValue] = dynamicValue;
+  //     return acc;
+  //   }, {});
 
   // Do something with the values, for example, log them
   console.log('Origin:', originValue);
   console.log('Destination:', destinationValue);
   console.log('Selected Mode:', selectedMode);
   console.log('Selected Mode ID:', selectedModeId);
-  console.log('Dynamic Field Values:', dynamicFieldValues);
+  // console.log('Dynamic Field Values:', dynamicFieldValues);
   
-  dynamicFieldJson.origin=originValue;
-  dynamicFieldJson.destination=destinationValue;
-  dynamicFieldJson.workflowId=selectedModeId;
-  let responseId;
-  console.log('Dynamic Field JSON:', dynamicFieldJson);
-    await axios.post("http://localhost:8080/api/request",dynamicFieldJson)
-    .then((response) => {
-      responseId=response.data.id;
-      toast.success("Work Order Created");
+    const operationData={};
+    operationData.data={};
+    operationData.data.origin=originValue;
+    operationData.data.destination=destinationValue;
+    operationData.graph=selectedWorkOrder;
+
+  // dynamicFieldJson.origin=originValue;
+  // dynamicFieldJson.destination=destinationValue;
+  // dynamicFieldJson.workflowId=selectedModeId;
+  // let responseId;
+  // console.log('Dynamic Field JSON:', dynamicFieldJson);
+    // await axios.post("http://localhost:8080/api/request",dynamicFieldJson)
+    // .then((response) => {
+    //   responseId=response.data.id;
+    //   toast.success("Work Order Created");
+    //   })
+    // .catch((error) =>{
+    //   console.log(error);
+    // });
+    // navigate(`/${responseId}`);
+    await axios.post("http://localhost:8080/runGraph",operationData)
+      .then((response) =>{
+
       })
-    .catch((error) =>{
-      console.log(error);
-    });
-    navigate(`/${responseId}`);
+      .catch((error) =>{
+
+      })
+    console.log(operationData);
   };
 
   return (
@@ -226,7 +246,6 @@ const ExecutionPage = () => {
                 )}
               </Grid>
 
-              {renderDynamicFields()}
 
               <Grid item xs={12}>
                 <Button
